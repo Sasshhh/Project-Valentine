@@ -7,8 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #00f3ff; /* Cyan */
-            --bg-color: #050505;      /* Deep Black */
+            --primary-color: #00f3ff;
+            --bg-color: #050505;
             --glass-bg: rgba(0, 243, 255, 0.05);
             --border-color: rgba(0, 243, 255, 0.4);
             --danger-color: #ff3333;
@@ -31,7 +31,6 @@
             background-size: 100% 100%, 40px 40px, 40px 40px;
         }
 
-        /* HUD Panel */
         .hud-panel {
             position: relative;
             width: 600px;
@@ -45,7 +44,6 @@
             z-index: 10;
         }
 
-        /* Scan Line Animation */
         .hud-panel::before {
             content: '';
             position: absolute;
@@ -64,25 +62,12 @@
             100% { top: 100%; opacity: 0; }
         }
 
-        h1 {
-            font-size: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px var(--primary-color);
-            margin-bottom: 10px;
-        }
+        h1 { font-size: 2rem; margin-bottom: 10px; text-shadow: 0 0 10px var(--primary-color); }
+        p { font-size: 1.1rem; color: rgba(0, 243, 255, 0.8); min-height: 60px; }
 
-        p {
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            color: rgba(0, 243, 255, 0.8);
-            min-height: 60px; /* Prevents jumping when text changes */
-        }
-
-        /* Buttons Container */
         .buttons {
             margin-top: 40px;
-            height: 60px; /* Reserve space */
+            height: 60px;
             position: relative;
             display: flex;
             justify-content: center;
@@ -105,66 +90,115 @@
         #yesBtn {
             border: 2px solid var(--primary-color);
             color: var(--primary-color);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
         }
 
         #yesBtn:hover {
             background: var(--primary-color);
             color: #000;
             box-shadow: 0 0 30px var(--primary-color);
-            transform: scale(1.1);
         }
 
         #noBtn {
             border: 2px solid var(--danger-color);
             color: var(--danger-color);
-            box-shadow: 0 0 15px rgba(255, 51, 51, 0.3);
-            /* Important for movement */
             transition: all 0.1s ease; 
             white-space: nowrap;
         }
 
-        /* Success Screen */
-        #success-screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-        }
+        #success-screen { display: none; flex-direction: column; align-items: center; }
 
         .holo-img {
-            width: 200px;
-            height: 150px;
-            object-fit: cover;
-            border: 2px solid var(--primary-color);
-            margin: 10px;
-            opacity: 0.8;
-            filter: sepia(100%) hue-rotate(130deg) saturate(200%);
+            width: 200px; height: 150px; object-fit: cover;
+            border: 2px solid var(--primary-color); margin: 10px;
+            opacity: 0.8; filter: sepia(100%) hue-rotate(130deg) saturate(200%);
             transition: 0.3s;
         }
-        
-        .holo-img:hover {
-            filter: none;
-            opacity: 1;
-            transform: scale(1.05);
-            box-shadow: 0 0 20px var(--primary-color);
-        }
+        .holo-img:hover { filter: none; opacity: 1; transform: scale(1.05); }
 
-        .data-list {
-            text-align: left;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            list-style: none;
-            padding: 0;
-        }
+        .data-list { text-align: left; margin-top: 20px; list-style: none; padding: 0; }
         .data-list li { margin: 10px 0; }
         .data-list li::before { content: '> '; color: var(--primary-color); }
 
-        /* Background Effects */
         .reactor-ring {
-            position: absolute;
-            border: 1px dashed rgba(0, 243, 255, 0.3);
-            border-radius: 50%;
-            z-index: -1;
-            animation: spin 20s linear infinite;
+            position: absolute; border: 1px dashed rgba(0, 243, 255, 0.3);
+            border-radius: 50%; z-index: -1; animation: spin 20s linear infinite;
         }
-        .ring-1 {
+        .ring-1 { width: 700px; height: 700px; }
+        .ring-2 { width: 500px; height: 500px; animation-direction: reverse; border-style: solid; opacity: 0.5; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div class="reactor-ring ring-1"></div>
+    <div class="reactor-ring ring-2"></div>
+
+    <div class="hud-panel" id="mission-screen">
+        <div style="border:1px solid var(--primary-color); display:inline-block; padding:5px 10px; margin-bottom:15px; font-size:0.8rem;">
+            SYSTEM STATUS: CRITICAL
+        </div>
+        
+        <h1 id="main-title">INITIATE DATE PROTOCOL?</h1>
+        <p id="sub-text">TARGET: VALENTINE'S DAY.<br>SELECT RESPONSE TO PROCEED.</p>
+
+        <div class="buttons">
+            <button id="yesBtn" onclick="acceptMission()">ACCEPT</button>
+            <button id="noBtn">DECLINE</button> 
+        </div>
+    </div>
+
+    <div class="hud-panel" id="success-screen">
+        <div style="border:1px solid #0f0; color:#0f0; display:inline-block; padding:5px 10px; margin-bottom:15px; font-size:0.8rem; background:rgba(0,255,0,0.1);">
+            ACCESS GRANTED
+        </div>
+        <h1>MISSION CONFIRMED</h1>
+        <p>PREPARE FOR EXTRACTION.</p>
+        
+        <div style="margin: 20px 0;">
+            <img src="pic1.jpg" class="holo-img" alt="Us 1">
+            <img src="pic2.jpg" class="holo-img" alt="Us 2">
+        </div>
+
+        <ul class="data-list">
+            <li>T-MINUS 1900 HOURS: PICKUP INITIATED</li>
+            <li>LOCATION: [RESTAURANT NAME HERE]</li>
+            <li>OBJECTIVE: DINNER & CLASSIFIED ACTIVITIES</li>
+        </ul>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        
+        const snarkyComments = [
+            "ERROR 404: NO NOT FOUND", "ACCESS DENIED", "ARE YOU SURE?", 
+            "SYSTEM MALFUNCTION", "NICE TRY, AGENT", "UNAUTHORIZED DECISION", 
+            "I CAN DO THIS ALL DAY", "RE-ROUTING...", "ILLUSORY CHOICE", "FORBIDDEN"
+        ];
+
+        function evade(e) {
+            if(e) e.preventDefault();
+            const maxX = window.innerWidth - noBtn.offsetWidth - 50;
+            const maxY = window.innerHeight - noBtn.offsetHeight - 50;
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            
+            const randomComment = snarkyComments[Math.floor(Math.random() * snarkyComments.length)];
+            noBtn.innerText = randomComment;
+        }
+
+        noBtn.addEventListener('mouseover', evade);
+        noBtn.addEventListener('touchstart', evade);
+        noBtn.addEventListener('click', evade);
+
+        function acceptMission() {
+            document.getElementById('mission-screen').style.display = 'none';
+            document.getElementById('success-screen').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
